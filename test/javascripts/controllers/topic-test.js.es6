@@ -1,9 +1,15 @@
+import { blank, present } from 'helpers/qunit-helpers';
+import { mapRoutes } from 'discourse/mapping-router';
+
 moduleFor('controller:topic', 'controller:topic', {
-  needs: ['controller:header', 'controller:modal', 'controller:composer', 'controller:quote-button',
-          'controller:search', 'controller:topic-progress', 'controller:application']
+  needs: ['controller:modal', 'controller:composer', 'controller:application'],
+  setup() {
+    this.registry.register('router:main', mapRoutes());
+  },
 });
 
 import Topic from 'discourse/models/topic';
+import AppEvents from 'discourse/lib/app-events';
 
 var buildTopic = function() {
   return Topic.create({
@@ -40,7 +46,7 @@ test("editingMode", function() {
 test("toggledSelectedPost", function() {
   var tc = this.subject({ model: buildTopic() }),
       post = Discourse.Post.create({id: 123, post_number: 2}),
-      postStream = tc.get('postStream');
+      postStream = tc.get('model.postStream');
 
   postStream.appendPost(post);
   postStream.appendPost(Discourse.Post.create({id: 124, post_number: 3}));
@@ -60,9 +66,9 @@ test("toggledSelectedPost", function() {
 });
 
 test("selectAll", function() {
-  var tc = this.subject({model: buildTopic()}),
+  var tc = this.subject({model: buildTopic(), appEvents: AppEvents.create()}),
       post = Discourse.Post.create({id: 123, post_number: 2}),
-      postStream = tc.get('postStream');
+      postStream = tc.get('model.postStream');
 
   postStream.appendPost(post);
 
@@ -80,7 +86,7 @@ test("Automating setting of allPostsSelected", function() {
   var topic = buildTopic(),
       tc = this.subject({model: topic}),
       post = Discourse.Post.create({id: 123, post_number: 2}),
-      postStream = tc.get('postStream');
+      postStream = tc.get('model.postStream');
 
   topic.set('posts_count', 1);
   postStream.appendPost(post);

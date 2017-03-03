@@ -1,7 +1,10 @@
 class HighlightJsController < ApplicationController
-  skip_before_filter :redirect_to_login_if_required, :check_xhr, :verify_authenticity_token, only: [:show]
+  skip_before_filter :preload_json, :redirect_to_login_if_required, :check_xhr, :verify_authenticity_token, only: [:show]
 
   def show
+
+    no_cookies
+
     RailsMultisite::ConnectionManagement.with_hostname(params[:hostname]) do
 
       current_version = HighlightJs.version(SiteSetting.highlighted_languages)
@@ -17,7 +20,7 @@ class HighlightJsController < ApplicationController
 
       response.headers["Last-Modified"] = 10.years.ago.httpdate
       response.headers["Content-Length"] = highlight_js.bytesize.to_s
-      expires_in 1.year, public: true
+      immutable_for 1.year
 
       render text: highlight_js, disposition: nil, content_type: 'application/javascript'
     end

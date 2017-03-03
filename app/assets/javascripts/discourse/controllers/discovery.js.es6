@@ -1,16 +1,19 @@
-import ObjectController from 'discourse/controllers/object';
+import DiscourseURL from 'discourse/lib/url';
 
-export default ObjectController.extend({
-  needs: ['navigation/category', 'discovery/topics', 'application'],
+export default Ember.Controller.extend({
+  discoveryTopics: Ember.inject.controller('discovery/topics'),
+  navigationCategory: Ember.inject.controller('navigation/category'),
+  application: Ember.inject.controller(),
+
   loading: false,
 
-  category: Em.computed.alias('controllers.navigation/category.category'),
-  noSubcategories: Em.computed.alias('controllers.navigation/category.noSubcategories'),
+  category: Em.computed.alias('navigationCategory.category'),
+  noSubcategories: Em.computed.alias('navigationCategory.noSubcategories'),
 
-  loadedAllItems: Em.computed.not("controllers.discovery/topics.canLoadMore"),
+  loadedAllItems: Em.computed.not("discoveryTopics.model.canLoadMore"),
 
   _showFooter: function() {
-    this.set("controllers.application.showFooter", this.get("loadedAllItems"));
+    this.set("application.showFooter", this.get("loadedAllItems"));
   }.observes("loadedAllItems"),
 
   showMoreUrl(period) {
@@ -24,7 +27,7 @@ export default ObjectController.extend({
 
   actions: {
     changePeriod(p) {
-      Discourse.URL.routeTo(this.showMoreUrl(p));
+      DiscourseURL.routeTo(this.showMoreUrl(p));
     }
   }
 

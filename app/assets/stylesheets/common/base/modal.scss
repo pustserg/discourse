@@ -11,6 +11,15 @@
 
 }
 
+.input-hint-text {
+  margin-left: 0.5em;
+  color: dark-light-diff($secondary, $primary, 30%, -35%);
+}
+
+.modal-header {
+  border-bottom: 1px solid dark-light-diff($primary, $secondary, 90%, -60%);
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -50,8 +59,8 @@
 }
 
 @-webkit-keyframes slidein {
-  from { transform: translateY(-20%); }
-    to { transform: translateY(0); }
+  from { -webkit-transform: translateY(-20%); }
+    to { -webkit-transform: translateY(0); }
 }
 
 .modal-outer-container {
@@ -64,8 +73,7 @@
   max-width: 710px;
   margin: 0 auto;
   background-color: $secondary;
-  border: 1px solid scale-color-diff();
-  border: 1px solid scale-color-diff();
+  border: 1px solid dark-light-diff($primary, $secondary, 90%, -60%);
 
   box-shadow: 0 3px 7px rgba(0,0,0, .8);
   background-clip: padding-box;
@@ -91,7 +99,7 @@
 }
 .modal-footer {
   padding: 14px 15px 15px;
-  border-top: 1px solid scale-color-diff();
+  border-top: 1px solid dark-light-diff($primary, $secondary, 90%, -60%);
 }
 .modal-footer:before,
 .modal-footer:after {
@@ -102,14 +110,22 @@
   clear: both;
 }
 
+.modal.edit-category-modal {
+  .modal-body {
+    textarea {
+      height: 10em;
+    }
+  }
+}
+
 .modal {
-    .nav {
+  .nav {
     padding: 10px 30px 10px 15px;
     background-color: dark-light-diff($secondary, $primary, 10%, -15%);
     li > a {
       font-size: 1em;
     }
-    border-bottom: 1px solid scale-color-diff();
+    border-bottom: 1px solid dark-light-diff($primary, $secondary, 90%, -60%);
 
   }
 
@@ -118,6 +134,9 @@
   }
 
   .modal-body {
+    &.full-height-modal {
+      max-height: calc(100vh - 150px);
+    }
     textarea {
       width: 99%;
       height: 80px;
@@ -126,7 +145,7 @@
       color: $primary;
     }
     p {
-      color: darken($primary, 40%);;
+      color: darken($primary, 40%);
       font-size: 0.929em;
     }
     .archetype-option {
@@ -137,6 +156,55 @@
     }
     .raw-email-textarea {
       height: 300px;
+    }
+    .json-uploader {
+      .jsfu-shade-container {
+        display: table-row;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+      .jsfu-shade {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        .text {
+          color: rgb(255,255,255);
+          position: absolute;
+          top: 40%;
+          font-size: 36px;
+          text-align: center;
+          line-height: 38px;
+          margin-left: auto;
+          margin-right: auto;
+          left: 0;
+          right: 0;
+        }
+      }
+      .jsfu-file {
+        display: table-cell;
+        vertical-align: middle;
+        min-width: 120px;
+      }
+      .jsfu-separator {
+        vertical-align: middle;
+        display: table-cell;
+        font-size: 36px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .jsfu-paste {
+        display: table-cell;
+        width: 100%;
+        textarea {
+          margin-bottom: 0;
+          margin-top: 4px;
+        }
+      }
     }
   }
   .password-confirmation {
@@ -161,13 +229,14 @@
       width: 310px;
       margin-bottom: 10px;
       display: block;
-      margin-left: 0;
+      margin-left: 0 !important; // override needed
+      font-weight: bold;
       .topic-title {
         font-size: 0.929em;
         font-weight: normal;
       }
       &.btn-reply-here {
-        background: scale-color-diff();
+        background: dark-light-diff($primary, $secondary, 90%, -60%);
         text-shadow: none;
         color: $primary;
       }
@@ -207,6 +276,9 @@
   .ember-text-field {
     width: 550px;
   }
+  .optional {
+    color: #9e9ea6;
+  }
 }
 
 .permission-list{
@@ -228,3 +300,33 @@
     margin-bottom: 10px;
   }
 }
+
+.edit-auto-close-modal {
+  .btn.pull-right {
+    margin-right: 10px;
+  }
+  form {
+    margin: 0;
+  }
+  .auto-close-fields {
+    i.fa-clock-o {
+      font-size: 1.143em;
+    }
+    input {
+      margin: 0;
+    }
+  }
+}
+
+.edit-category-modal {
+  .auto-close-fields, .num-featured-topics-fields, .position-fields {
+    input[type=text] {
+      width: 50px;
+    }
+  }
+
+  .auto-close-fields label {
+    font-size: .929em;
+  }
+}
+

@@ -3,8 +3,8 @@
 # See https://github.com/discourse/discourse/blob/master/docs/VAGRANT.md
 #
 Vagrant.configure("2") do |config|
-  config.vm.box     = 'discourse/discourse-1.3.0'
-  config.vm.box_url = "http://discourse-vms.s3.amazonaws.com/discourse-1.3.0.box"
+  config.vm.box     = 'discourse-16.04'
+  config.vm.box_url = "https://www.dropbox.com/s/2132770g1e05c6d/discourse.box?dl=1"
 
   # Make this VM reachable on the host network as well, so that other
   # VM's running other browsers can access our dev server.
@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |v|
     # This setting gives the VM 1024MB of RAM instead of the default 384.
-    v.customize ["modifyvm", :id, "--memory", [ENV['DISCOURSE_VM_MEM'].to_i, 2048].max]
+    v.customize ["modifyvm", :id, "--memory", [ENV['DISCOURSE_VM_MEM'].to_i, 1024].max]
 
     # Who has a single core cpu these days anyways?
     cpu_count = 2
@@ -43,6 +43,6 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 1080, host: 4080 # Mailcatcher
 
   nfs_setting = RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
-  config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", :nfs => nfs_setting
+  config.vm.synced_folder ".", "/vagrant", id: "vagrant-root"
 
 end
